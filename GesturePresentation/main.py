@@ -36,7 +36,7 @@ while True:
     # Find the hand and its landmarks
     hands, img = detectorHand.findHands(img)  # with draw
     # Draw Gesture Threshold line
-    cv2.line(img, (0, gestureThreshold), (width, gestureThreshold), (0, 0, 0), 1)
+    cv2.line(img, (0, gestureThreshold), (width, gestureThreshold), (0, 0, 0), 10)
     if hands and buttonPressed is False:  # If hand is detected
         hand = hands[0]
         cx, cy = hand["center"]
@@ -99,3 +99,49 @@ while True:
     key = cv2.waitKey(1)
     if key == ord('q'):
         break
+        #
+        # # Zoom gestures
+        # thumbTip = lmList[4]
+        # indexTip = lmList[8]
+        # distance = np.linalg.norm(np.array(thumbTip) - np.array(indexTip))
+        # if distance < 50:
+        #     zoomLevel -= 0.1
+        #     if zoomLevel < 0.1:
+        #         zoomLevel = 0.1
+        # elif distance > 150:
+        #     zoomLevel += 0.1
+        #     if zoomLevel > 2:
+        #         zoomLevel = 2
+        #
+        # # Update image size based on zoom level
+        # imgCurrent = cv2.resize(imgCurrent, (int(width * zoomLevel), int(height * zoomLevel)))
+        #
+        # if cy <= gestureThreshold:  # If hand is at the height of the face
+        #     if fingers == [0, 1, 1, 1, 1]:
+        #         print("Left")
+        #         buttonPressed = True
+        #         if imgNumber > 0:
+        #             imgNumber -= 1
+        #             annotations = [[]]
+        #             annotationNumber = -1
+        #             annotationStart = False
+        #     if fingers == [0, 1, 1, 1, 1]:
+        #         print("Right")
+        #         buttonPressed = True
+        #         if imgNumber < len(pathImages) - 1:
+        #             imgNumber += 1
+        #             annotations = [[]]
+        #             annotationNumber = -1
+        #             annotationStart = False
+        #
+        # if fingers == [0, 1, 1, 1, 1]:
+        #     cv2.circle(imgCurrent, indexFinger, 12, (0, 0, 255), cv2.FILLED)
+        #
+        # if fingers == [0, 1, 1, 1, 1]:
+        #     if annotationStart is False:
+        #         annotationStart = True
+        #         annotationNumber += 1
+        #         annotations.append([])
+        #     print(annotationNumber)
+        #     annotations[annotationNumber].append(indexFinger)
+        #     cv2.circle(imgCurrent, indexFinger, 12, (0, 0, 255), cv2.FILLED)
