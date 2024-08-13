@@ -47,6 +47,8 @@ while True:
         yVal = int(np.interp(lmList[8][1], [150, height-150], [0, height]))
         indexFinger = xVal, yVal
         if cy <= gestureThreshold:  # If hand is at the height of the face
+
+            # Gesture 1:To forward the slide
             if fingers == [1, 0, 0, 0, 0]:
                 print("Left")
                 buttonPressed = True
@@ -55,6 +57,8 @@ while True:
                     annotations = [[]]
                     annotationNumber = -1
                     annotationStart = False
+
+            # Gesture 2:To backward the slide
             if fingers == [0, 0, 0, 0, 1]:
                 print("Right")
                 buttonPressed = True
@@ -63,8 +67,12 @@ while True:
                     annotations = [[]]
                     annotationNumber = -1
                     annotationStart = False
+
+            # Gesture 3:To navigate the slide
         if fingers == [0, 1, 1, 0, 0]:
             cv2.circle(imgCurrent, indexFinger, 12, (0, 0, 255), cv2.FILLED)
+
+            # Gesture 4:To mark on the slide
         if fingers == [0, 1, 0, 0, 0]:
             if annotationStart is False:
                 annotationStart = True
@@ -75,6 +83,8 @@ while True:
             cv2.circle(imgCurrent, indexFinger, 12, (0, 0, 255), cv2.FILLED)
         else:
             annotationStart = False
+
+            # Gesture 5:To undo the marked part
         if fingers == [0, 1, 1, 1, 0]:
             if annotations:
                 annotations.pop(-1)
@@ -99,49 +109,3 @@ while True:
     key = cv2.waitKey(1)
     if key == ord('q'):
         break
-        #
-        # # Zoom gestures
-        # thumbTip = lmList[4]
-        # indexTip = lmList[8]
-        # distance = np.linalg.norm(np.array(thumbTip) - np.array(indexTip))
-        # if distance < 50:
-        #     zoomLevel -= 0.1
-        #     if zoomLevel < 0.1:
-        #         zoomLevel = 0.1
-        # elif distance > 150:
-        #     zoomLevel += 0.1
-        #     if zoomLevel > 2:
-        #         zoomLevel = 2
-        #
-        # # Update image size based on zoom level
-        # imgCurrent = cv2.resize(imgCurrent, (int(width * zoomLevel), int(height * zoomLevel)))
-        #
-        # if cy <= gestureThreshold:  # If hand is at the height of the face
-        #     if fingers == [0, 1, 1, 1, 1]:
-        #         print("Left")
-        #         buttonPressed = True
-        #         if imgNumber > 0:
-        #             imgNumber -= 1
-        #             annotations = [[]]
-        #             annotationNumber = -1
-        #             annotationStart = False
-        #     if fingers == [0, 1, 1, 1, 1]:
-        #         print("Right")
-        #         buttonPressed = True
-        #         if imgNumber < len(pathImages) - 1:
-        #             imgNumber += 1
-        #             annotations = [[]]
-        #             annotationNumber = -1
-        #             annotationStart = False
-        #
-        # if fingers == [0, 1, 1, 1, 1]:
-        #     cv2.circle(imgCurrent, indexFinger, 12, (0, 0, 255), cv2.FILLED)
-        #
-        # if fingers == [0, 1, 1, 1, 1]:
-        #     if annotationStart is False:
-        #         annotationStart = True
-        #         annotationNumber += 1
-        #         annotations.append([])
-        #     print(annotationNumber)
-        #     annotations[annotationNumber].append(indexFinger)
-        #     cv2.circle(imgCurrent, indexFinger, 12, (0, 0, 255), cv2.FILLED)
