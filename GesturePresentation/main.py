@@ -24,6 +24,9 @@ annotations = [[]]
 annotationNumber = -1
 annotationStart = False
 hs, ws = int(120 * 1), int(213 * 1)  # width and height of small image
+# Initialize zoom variables
+zoomLevel = 1.0
+zoomFactor = 0.1  # Amount to zoom in/out per gesture
 # Get list of presentation images
 pathImages = sorted(os.listdir(folderPath), key=len)
 print(pathImages)
@@ -68,6 +71,7 @@ while True:
                     annotationNumber = -1
                     annotationStart = False
 
+
             # Gesture 3:To navigate the slide
         if fingers == [0, 1, 1, 0, 0]:
             cv2.circle(imgCurrent, indexFinger, 12, (0, 0, 255), cv2.FILLED)
@@ -84,7 +88,30 @@ while True:
         else:
             annotationStart = False
 
-            # Gesture 5:To undo the marked part
+            # Inside the while True loop, after detecting fingers
+            if hands and buttonPressed is False:  # If hand is detected
+                hand = hands[0]
+
+                # Gesture 5 for Zoom In
+                if fingers == [1, 1, 1, 1, 1]:
+                    zoomLevel += zoomFactor
+                    print("Zoom In")
+
+                # Gesture 6 for Zoom Out
+                if fingers == [0, 0, 0, 0, 0]:
+                    zoomLevel = max(1.0, zoomLevel - zoomFactor)  # Prevent zooming out too much
+                    print("Zoom Out")
+
+            # Scale the current image based on zoomLevel
+            imgCurrent = cv2.resize(imgCurrent,
+                                    (int(imgCurrent.shape[1] * zoomLevel), int(imgCurrent.shape[0] * zoomLevel)))
+
+            # Ensure the image doesn't exceed display bounds (optional)
+            imgCurrent = imgCurrent[:height, :width]
+
+            # ... (remaining code) ...
+
+            # Gesture 7:To undo the marked part
         if fingers == [0, 1, 1, 1, 0]:
             if annotations:
                 annotations.pop(-1)
